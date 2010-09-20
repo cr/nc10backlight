@@ -1,0 +1,54 @@
+nc10backlight 0.1 - backlight workaround
+by cr at 23 bit dot net
+Licensed under GPLv2
+
+
+Sets backlight level via PCI registers on Samsung NC10. It is inteded as work-around
+for dysfunctional xbacklight, for example on Fedora 11 without the nomodeset Kernel
+parameter. You cannot use nomodeset if you run Compiz, for example, because it
+requires GEM which is disabled by nomodeset. The nc10backlight requires root
+privileges and is installed as suid root binary.
+
+
+------------------------------------------------------------------------------------
+NOTE: Later Linux kernels contain a fix for the problem, so consider the backlight
+issue solved and this tool obsolete. I uploaded it as an example on raw Linux PCI
+register programming in the hopes that someone finds this useful.
+------------------------------------------------------------------------------------
+
+
+Disclaimer:
+	USE AT YOUR OWN RISK! This program writes directly to PCI
+	registers, so IT MIGHT DAMAGE YOUR HARDWARE. It might run
+	fine on other Intel Atom hardware with Mobile 94xGx, but the
+	current version is hardcoded to the Samsung NC10. The checks
+	might fail, so don't try to run it on different hardware.
+
+Installation:
+	sudo yum install libpciaccess-devel
+	tar zxf nc10backlight*.tgz
+	cd nc10backlight-*
+	make
+	sudo make install
+
+Usage:
+	print current level: nc10brightness
+	set maximum level: nc10brightness -set 255
+	decrease by 20: nc10brightness - 20
+	usage info: nc10brightness -h
+
+Key bindings (optional):
+	Just to give you an example...
+	for Gnome/Metacity:
+		in gconf-editor
+		- add /apps/metacity/global_keybindings/run_command_5: "<Control>Up"
+		- add /apps/metacity/global_keybindings/run_command_6: "<Control>Down"
+		- add /apps/metacity/keybindings_commands/run_command_5: "nc10backlight -inc 17"
+		- add /apps/metacity/keybindings_commands/run_command_6: "nc10backlight -dec 17"
+	for Gnome/Compiz
+		in gconf-editor
+		- add /apps/compiz/genera/allscreens/options/run_command5_key: "<Control>Up"
+		- add /apps/compiz/genera/allscreens/options/run_command6_key: "<Control>Down"
+		- add /apps/compiz/genera/allscreens/options/command5: "nc10backlight -inc 17"
+		- add /apps/compiz/genera/allscreens/options/command6: "nc10backlight -dec 17"
+
